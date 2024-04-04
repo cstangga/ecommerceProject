@@ -1,11 +1,14 @@
 import data.Customer;
 import data.Order;
+import repository.customerRepo.MemoryCustomerRepository;
 import service.CustomerService;
 import service.OrderService;
 import service.ProductService;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Application {
@@ -18,10 +21,9 @@ public class Application {
     //Constructor & Setup
     public Application() {
         // 아직 서비스 객체 싱글톤 아님.
-        this.customerService = new CustomerService();
+        this.customerService =new CustomerService();
         this.orderService = new OrderService();
         this.productService = new ProductService();
-
     }
 
     //main menu method -> interface to user console
@@ -33,19 +35,30 @@ public class Application {
             int choice = scanner.nextInt();
             switch (choice){
                 //1. 고객 관리
-                case 1:
+                case 1://1-1
                     customerMenu: while(true){
                         System.out.println(NEWLINE_TEN);
                         System.out.print(MENU_CUSTOMER);
                         choice = scanner.nextInt();
+                        scanner.nextLine();
                         switch (choice){
                             // 고객 등록
                             case 1:
-                                System.out.println("Customer Add Entered!"); // 테스트용 출력 코드
+                                // 여기서 회원 정보를 입력한다
                                 System.out.println(NEWLINE_TEN);
                                 System.out.print(MENU_CUSTOMER_ADD);
                                 try{
                                     Customer newCustomer = inputCustomer();
+
+                                    //저장소에 저장해야 됨
+                                    // Service 넘겨서 bool 받고 출력(됐는지 안됐는지)
+                                    // 1. 입력이 됐다, 2. 입력이 안됐다( 중복된 값이 있다)
+                                    boolean check=customerService.inputCustomer(newCustomer);
+                                    if(check)
+                                    {
+                                        System.out.println("정상적으로 입력 됐습니다");
+                                    }
+                                    else System.out.println("id값입니다");
                                 }catch (InputMismatchException e){
                                     System.out.println(ERROR_WRONG_INPUT);
                                     break;
@@ -54,15 +67,84 @@ public class Application {
 
                             // 고객 삭제
                             case 2:
-                                System.out.println("Customer Delete Entered!"); //테스트용 출력 코드
+                                // id값을 기준으로 service에 넘겨준다
                                 System.out.println(NEWLINE_TEN);
                                 System.out.print(MENU_CUSTOMER_DELETE);
+                                //입력을 잘 했다는 가정으로
+                                //1. 입력된 정보가 삭제 됐습니다 2. 입력된 정보가 없어 삭제가 안됐습니다
+
+                                long id=scanner.nextLong();
+                                scanner.nextLine();
+                                boolean check=customerService.deleteCustomer(id);
+
+                                if(check)
+                                    System.out.println("삭제가 완료됐습니다");
+                                else System.out.println("입력한 정보가 없어 삭제가 안됐습니다");
+
                                 break;
                             // 고객 조회
                             case 3:
-                                System.out.println("Customer Find Entered!"); //테스트용 출력 코드
+                                //id값을 기준으로 조회한다, 전체 조회를 한다
                                 System.out.println(NEWLINE_TEN);
                                 System.out.print(MENU_CUSTOMER_FIND);
+
+                                choice=scanner.nextInt();
+                                scanner.nextLine();
+
+                                switch (choice)
+                                {
+                                    case 1: //name으로 검색
+
+                                        System.out.printf(MENU_CUSTOMER_FIND_NAME);
+                                        String name=scanner.next();// 이름 입력
+                                        Customer customer=customerService.findByName(name);
+                                        if(customer!=null)
+                                            System.out.println(customer.toString());
+                                        else System.out.println("일치하는 정보가 없습니다");
+                                        break;
+
+                                    case 2: //id로 검색
+
+                                        System.out.println(MENU_CUSTOMER_FIND_ID);
+                                        id=scanner.nextLong();
+                                        scanner.nextLine();
+
+                                        customer=customerService.findById(id);
+
+                                        if(customer!=null)
+                                            System.out.println(customer.toString());
+                                        else System.out.println("일치하는 정보가 없습니다");
+                                        // 검색, 메소드 -> 출력
+                                        break;
+
+                                    case 3:
+                                        //일단 전체조회로 했다
+                                        // 생일로 검색(MM으로 검색해야 겟지??)//----------이건 고민좀 하자
+                                        System.out.println("전체 검색");
+                                        List<Customer>customers =customerService.findAll();
+                                        if(customers!=null)
+                                        {
+                                            for(Customer customer1:customers)
+                                            {
+                                                System.out.println(customer1.toString());
+                                            }
+                                        }
+                                        else System.out.println("회원이 아예 없습니다");
+
+
+                                        // 검색, 메소드 -> 출력
+                                        break;
+                                    case 4:
+                                        System.out.println("생일검색");
+                                        System.out.println(MENU_CUSTOMER_FIND_BIRTHDAY);
+                                        String mmdd=scanner.nextLine();
+                                        customer=customerService.findByBirth(mmdd);
+                                        if(customer==null)
+                                        {
+                                            System.out.println("조건에 맞는 회원이 없습니다");
+                                        }
+                                        else System.out.println(customer.toString());
+                                }
                                 break;
                             // 뒤로 가기
                             case 0: break customerMenu;
@@ -72,7 +154,7 @@ public class Application {
 
                 //2. 주문 관리
                 case 2:
-                    orderMenu: while(true){
+                    orderMenu : while(true){
                         System.out.println(NEWLINE_TEN);
                         System.out.print(MENU_ORDER);
                         choice = scanner.nextInt();
@@ -109,6 +191,7 @@ public class Application {
                         choice = scanner.nextInt();
                         switch (choice){
                             // 상품 등록
+                            //
                             case 1:
                                 System.out.println("Product Add Entered!"); //테스트용 출력 코드
                                 System.out.println(NEWLINE_TEN);
@@ -121,6 +204,7 @@ public class Application {
                                 System.out.print(MENU_PRODUCT_DELETE);
                                 break;
                             // 상품 조회
+                            //
                             case 3:
                                 System.out.println("Product Find Entered!"); //테스트용 출력 코드
                                 System.out.println(NEWLINE_TEN);
@@ -139,8 +223,6 @@ public class Application {
                 default:
                     System.out.println(ERROR_WRONG_INPUT);
                     break;
-
-
             }
         }
     }
@@ -148,24 +230,33 @@ public class Application {
     // Application's method for surveying and making instance of Customer
     public Customer inputCustomer() throws InputMismatchException {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("id: ");
+        //입력 예시를 보여주고
+        System.out.print("id: ");//따로 메소드 설정을 고민
         long id = scanner.nextLong();
         scanner.nextLine();
+
         System.out.print("name: ");
         String name = scanner.nextLine();
+
         System.out.print("age: ");
         int age = scanner.nextInt();
         scanner.nextLine();
+
         System.out.print("phone number: ");
         String phoneNumber = scanner.nextLine();
+
         System.out.print("address: ");
         String address = scanner.nextLine();
-        System.out.print("birthday(YYYY-MM-DD): ");
+
+        System.out.print("birthday(YYYYMMDD): ");
         //TODO 생일 입력받아 LocalDate 객체로 만들기
-        String birth = scanner.nextLine();
-        LocalDate birthday = LocalDate.now(); // Dummy for test
-        System.out.print("tier: ");
-        String tier = scanner.nextLine();
+        String birth = scanner.nextLine();// string -> LocalDate 이거 찾아서 작업해야됨
+
+        LocalDate birthday = LocalDate.parse(birth, DateTimeFormatter.BASIC_ISO_DATE); // 다시 찾아봐
+        System.out.println("생일값 : "+birthday);
+
+        System.out.print("tier: "); // enum바꿀예정
+        String tier=scanner.nextLine();
         return new Customer(id, name, age, phoneNumber, address, birthday, tier);
     }
     /*
@@ -225,7 +316,8 @@ public class Application {
                     <FIND CUSTOMER>
             1. BY NAME
             2. BY ID
-            3. TODAY'S BIRTHDAY
+            3. BY ALL
+            4. TODAY'S BIRTHDAY
             0. GO BACK
             ==============================
             ENTER: """;
@@ -282,14 +374,14 @@ public class Application {
     static final String MENU_PRODUCT_DELETE = """
             ==============================
                    <DELETE PRODUCT>
-            """;
+            """;//id 기준으로 삭제
     static final String MENU_PRODUCT_FIND = """
             ==============================
                      <FIND PRODUCT>
             1. FIND BY NAME
             2. FIND BY ID
             ==============================
-            ENTER: """;
+            ENTER: """;// 상품 고유아이디, 상품 명
 
     //terminate info
     static final String TERMINATE_INFO = """

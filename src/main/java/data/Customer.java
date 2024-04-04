@@ -1,16 +1,15 @@
 package data;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 public class Customer {
-    private long id;
+    private long id;// 이건 해쉬값인가?? 이건 내가 찾아봐야겟네//set과 list 고민해봐
     private String name;
     private int age;
     private String phoneNumber;
     private String address;
     private LocalDate birth;
-    private String tier;
+    private String tier; //이거 티어는 내가 정하는 건지?? ex) bronze, silver, gold, vip 등등
 
     public Customer(long id, String name, int age, String phoneNumber, String address, LocalDate birth, String tier) {
         this.id = id;
@@ -20,6 +19,18 @@ public class Customer {
         this.address = address;
         this.birth = birth;
         this.tier = tier;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "id: '" + id +'\''+
+                " 이름: '" + name + '\'' +
+                " 나이: '" + age +'\'' +
+                " 전화번호: '" + phoneNumber + '\'' +
+                " 주소: '" + address + '\'' +
+                " 생년월일: '" + birth +
+                " 등급: '" + tier + '\'';
     }
 
     public long id() {
