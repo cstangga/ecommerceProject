@@ -3,5 +3,5 @@ package repository.productRepo;
 import data.Product;
 
 public interface ProductRepository {
-    public Product findById(long id);
+    public boolean saveProduct(long id, String name, int price, int stock, String category);
 }

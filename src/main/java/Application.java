@@ -46,6 +46,7 @@ public class Application {
                                 System.out.print(MENU_CUSTOMER_ADD);
                                 try{
                                     Customer newCustomer = inputCustomer();
+
                                 }catch (InputMismatchException e){
                                     System.out.println(ERROR_WRONG_INPUT);
                                     break;
@@ -113,6 +114,9 @@ public class Application {
                                 System.out.println("Product Add Entered!"); //테스트용 출력 코드
                                 System.out.println(NEWLINE_TEN);
                                 System.out.print(MENU_PRODUCT_ADD);
+                                //input
+
+                                boolean result = productService.saveProduct(name, price, stock, catego ry)
                                 break;
                             // 상품 삭제
                             case 2:

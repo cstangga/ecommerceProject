@@ -1,12 +1,14 @@
 package data;
 
 public class Product {
+    long id;
     private String name;
     private int price;
     private int stock;
     private String category;
 
-    public Product(String name, int price, int stock, String category) {
+    public Product(long id, String name, int price, int stock, String category) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.stock = stock;
@@ -43,5 +45,13 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
