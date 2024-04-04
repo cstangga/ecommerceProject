@@ -43,8 +43,21 @@ public class MemoryProductRepository implements ProductRepository{
         }
     }
 
-    public List<Product> findProductById(long id){
-        ArrayList<Product> results = new ArrayList<>();
+    @Override
+    public Product findById(long id){
+        Product foundProduct = null;
+        for(Product product : repository){
+            if(product.getId()==id)foundProduct = product;
+        }
+        return foundProduct;
 
+    }
+    @Override
+    public Product findByName(String name){
+        Product foundProduct = null;
+        for(Product product : repository){
+            if(product.getName().equals(name))foundProduct = product;
+        }
+        return foundProduct;
     }
 }

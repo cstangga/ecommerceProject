@@ -170,7 +170,7 @@ public class Application {
                                 Customer foundCustomer = customerService.findById(customerId);
                                 System.out.print("Peoduct ID: ");
                                 long productId = scanner.nextLong();
-                                Product foundProduct = productService.findProductById(productId);
+                                Product foundProduct = productService.findById(productId);
                                 System.out.print("Quantity: ");
                                 int quantity = scanner.nextInt();
                                 String deliverAddr = foundCustomer.getAddress();
@@ -248,7 +248,7 @@ public class Application {
                                 System.out.print(MENU_PRODUCT_ADD);
                                 //input
 
-                                boolean result = productService.saveProduct(name, price, stock, catego ry)
+                                boolean result = productService.saveProduct(name, price, stock, category)
                                 break;
                             // 상품 삭제
                             case 2:
