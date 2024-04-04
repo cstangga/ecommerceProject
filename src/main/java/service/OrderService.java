@@ -46,4 +46,7 @@ public class OrderService {
         }
         else return null;
     }
+    public List<Order> findOrderAll(){
+        return orderRepository.findOrderAll();
+    }
 }

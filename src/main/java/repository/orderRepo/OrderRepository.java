@@ -13,6 +13,7 @@ public interface OrderRepository {
     List<Order> findOrderByProduct(Product product);
     List<Order> findOrderRecent();
     Order findById(long id);
+    List<Order> findOrderAll();
 
 
 

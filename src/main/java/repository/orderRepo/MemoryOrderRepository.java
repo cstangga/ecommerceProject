@@ -81,4 +81,9 @@ public class MemoryOrderRepository implements OrderRepository{
         }
         return foundOrder;
     }
+
+    @Override
+    public List<Order> findOrderAll(){
+        return repository;
+    }
 }
