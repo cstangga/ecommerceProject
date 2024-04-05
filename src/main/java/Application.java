@@ -247,8 +247,20 @@ public class Application {
                                 System.out.println(NEWLINE_TEN);
                                 System.out.print(MENU_PRODUCT_ADD);
                                 //input
+                                System.out.printf("상품코드");
+                                long id= scanner.nextLong();
+                                System.out.printf("상품명");
+                                String name=scanner.nextLine();
 
-                                boolean result = productService.saveProduct(name, price, stock, category)
+                                System.out.printf("가격");
+                                int price=scanner.nextInt();
+
+                                System.out.printf("재고");
+                                int stock =scanner.nextInt();
+
+                                System.out.printf("카테고리");
+                                String category=scanner.nextLine();
+                                boolean result = productService.saveProduct(id,name, price, stock, category);
                                 break;
                             // 상품 삭제
                             case 2:
